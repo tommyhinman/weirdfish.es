@@ -1,0 +1,4 @@
+Needed to modify django_openid_auth to work with mysql:
+
+/Users/tommy/.virtualenvs/weirdfishes/lib/python2.7/site-packages/django_openid_auth
+-Changed claimed_id to use CharField(max_length=255, unique=True)
