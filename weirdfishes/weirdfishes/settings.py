@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     'polls',
+    'ratings',
 )
 
 # A sample logging configuration. The only tangible logging

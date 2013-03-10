@@ -9,7 +9,7 @@ url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 url(r'^admin/', include(admin.site.urls)),
 
 url(r'^polls/', include('polls.urls', namespace="polls")),
-
+url(r'^', include('ratings.urls', namespace="ratings")),
 )
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
