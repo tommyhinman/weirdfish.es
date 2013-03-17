@@ -1,0 +1,16 @@
+{% if user.is_authenticated %}
+	<p>Welcome, {{user.username}}.</p>
+{% else %}
+	<p>Welcome, new user.</p>
+{% endif %}
+
+<p>Artist List</p>
+
+{% if artistList %}
+    <ul>
+    {% for artist in artistList %}
+        <li><a href="{% url 'ratings:viewArtist' artist.id %}">{{ artist.name }}</a></li>
+    {% endfor %}
+{% else %}
+    <p>No artists available.</p>
+{% endif %}

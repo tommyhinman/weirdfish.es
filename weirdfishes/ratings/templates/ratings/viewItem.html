@@ -1,0 +1,18 @@
+<h1>{{artist.name}} -  {{ item.name }} </h1>
+
+
+<form action="{% url 'ratings:rateItem' item.id %}" method="post">
+	{% csrf_token %}
+	<label for="value"><input type="text" name="value" id="value"/></label>
+	<input type="submit" value="Rate" />
+</form>
+
+<h3>Ratings:</h3>
+{% if ratingList %}
+    <ul>
+    {% for rating in ratingList %}
+        <li>{{ rating.user }} rated this item {{ rating.value }}/10</li>
+    {% endfor %}
+{% else %}
+    <p>No ratings for this item.</p>
+{% endif %}

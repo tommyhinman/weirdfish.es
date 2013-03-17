@@ -1,0 +1,10 @@
+<h1>Artist: {{ artist.name }} </h1>
+
+{% if itemList %}
+    <ul>
+    {% for item in itemList %}
+        <li><a href="{% url 'ratings:viewItem' item.id %}">{{ item.name }}</a></li>
+    {% endfor %}
+{% else %}
+    <p>No items available for this artist.</p>
+{% endif %}
