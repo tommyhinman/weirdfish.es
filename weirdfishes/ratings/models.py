@@ -19,6 +19,7 @@ class Item(models.Model):
 	artist = models.ForeignKey(Artist)
 	name = models.CharField(max_length=255)
 	item_type = models.CharField(max_length=2, choices=ITEM_TYPES)
+	release_date = models.DateField()
 
 	def __unicode__(self):
 		return self.name

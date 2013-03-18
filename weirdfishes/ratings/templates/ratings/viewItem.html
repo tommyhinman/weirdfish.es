@@ -1,4 +1,8 @@
-<h1>{{artist.name}} -  {{ item.name }} </h1>
+{% extends 'ratings/base.html' %}
+
+{% block body %}
+
+<h3><a href="{% url 'ratings:viewArtist' artist.id %}">{{artist.name}}</a> -  {{ item.name }} </h3>
 
 
 <form action="{% url 'ratings:rateItem' item.id %}" method="post">
@@ -16,3 +20,5 @@
 {% else %}
     <p>No ratings for this item.</p>
 {% endif %}
+
+{% endblock %}

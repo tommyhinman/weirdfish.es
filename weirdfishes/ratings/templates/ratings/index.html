@@ -1,16 +1,27 @@
-{% if user.is_authenticated %}
-	<p>Welcome, {{user.username}}.</p>
-{% else %}
-	<p>Welcome, new user.</p>
-{% endif %}
+{% extends 'ratings/base.html' %}
+{% block body %}
+    <h3>Artist List</h3>
 
-<p>Artist List</p>
+    {% if artistList %}
+        <ul>
+        {% for artist in artistList %}
+            <li><a href="{% url 'ratings:viewArtist' artist.id %}">{{ artist.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No artists available.</p>
+    {% endif %}
 
-{% if artistList %}
-    <ul>
-    {% for artist in artistList %}
-        <li><a href="{% url 'ratings:viewArtist' artist.id %}">{{ artist.name }}</a></li>
-    {% endfor %}
-{% else %}
-    <p>No artists available.</p>
-{% endif %}
+    <h3>Add Artist</h3>
+    <form action="{% url 'ratings:addArtist' %}" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td><label for="artist_name">Name: </label></td>
+                <td><input type="text" name="artist_name" id="artist_name" /> </td>
+            </tr>
+        </table>
+
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}

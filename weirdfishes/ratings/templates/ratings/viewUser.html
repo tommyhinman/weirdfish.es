@@ -1,0 +1,16 @@
+{% extends 'ratings/base.html' %}
+
+{% block body %}
+
+<h3>Ratings for {{user.name}}</h3>
+
+{% if ratingList %}
+	<ul>
+	{% for rating in ratingList %}
+		<li><a href="{% url 'ratings:viewArtist' rating.item.artist.id %}">{{rating.item.artist.name}}</a> - <a href="{% url 'ratings:viewItem' rating.item.id %}">{{rating.item.name}}</a> - {{rating.value}}/10</li>
+	{% endfor %}
+{% else %}
+	<p>No ratings yet!</p>
+{% endif %}
+
+{% endblock %}
