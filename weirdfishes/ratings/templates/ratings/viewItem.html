@@ -15,7 +15,7 @@
 {% if ratingList %}
     <ul>
     {% for rating in ratingList %}
-        <li>{{ rating.user }} rated this item {{ rating.value }}/10</li>
+        <li><a href="{% url 'ratings:viewUser' rating.user.id %}">{{ rating.user }}</a> rated this item {{ rating.value }}/10</li>
     {% endfor %}
 {% else %}
     <p>No ratings for this item.</p>
