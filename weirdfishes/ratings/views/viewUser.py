@@ -5,8 +5,8 @@ from ratings.models import Artist, Item, Rating, User
 
 @login_required
 def viewUser(request, user_id):
-	user = get_object_or_404(User, pk=user_id)
+	userToView = get_object_or_404(User, pk=user_id)
 	ratingList = Rating.objects.filter(user=user_id)
 
-	context = {'user': user, 'ratingList': ratingList}
+	context = {'userToView': userToView, 'ratingList': ratingList}
 	return render(request, 'ratings/viewUser.html', context)

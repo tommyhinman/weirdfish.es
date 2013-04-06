@@ -1,16 +1,87 @@
 {% extends 'ratings/base.html' %}
 
+{% block extraheaders %}
+
+    <script type="text/javascript">
+        $(document).ready(
+            function() { 
+                $("#pretty-table").tablesorter(); 
+                $("tbody").find("tr").find("td.star").find("div").each(function() {
+                    $(this).raty({
+                        path     : '{{STATIC_URL}}img',
+                        size     : 24,
+                        half     : true,
+                        starHalf : 'star-half-big.png',
+                        starOff  : 'star-off-big.png',
+                        starOn   : 'star-on-big.png',
+                        score    : function() {
+                            return $(this).attr('score') / 2;
+                        },
+                        click    : function(score, evt) {
+                            rate_item($(this).attr('id'), score);
+                        },
+                        readOnly : function() {
+                            return !viewingSelf(); 
+                        }
+                    });
+                });
+            } 
+        );
+
+        function rate_item(item_id, value) {
+            value = value * 2;
+            data = {
+                item_id : item_id,
+                value   : value,
+            };
+            var serializedData = JSON.stringify(data);
+            Dajaxice.ratings.rate_item(Dajax.process, {'data': serializedData});
+
+            $('#' + item_id).closest('tr').attr('class', 'rating' + value);
+        }
+
+        function viewingSelf() {
+            {% if user == userToView %}
+                return true;
+            {% else %}
+                return false;
+            {% endif %}
+        }
+
+
+    </script>   
+
+{% endblock %}
+
 {% block body %}
 
-<h3>Ratings for {{user.name}}</h3>
+<h3>Ratings for {{userToView.username}}</h3>
 
 {% if ratingList %}
-	<ul>
-	{% for rating in ratingList %}
-		<li><a href="{% url 'ratings:viewArtist' rating.item.artist.id %}">{{rating.item.artist.name}}</a> - <a href="{% url 'ratings:viewItem' rating.item.id %}">{{rating.item.name}}</a> - {{rating.value}}/10</li>
-	{% endfor %}
+
+    <table id="pretty-table" cellpadding="4">
+        <thead>
+            <tr>
+                <th scope="col">Artist</th>
+                <th scope="col">Album</th>
+                <th scope="col">Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rating in ratingList %}
+                <tr class="rating{{rating.value}}">
+                    <td><a href="{% url 'ratings:viewArtist' rating.item.artist.id %}">{{rating.item.artist.name}}</a></td>
+                    <td><a href="{% url 'ratings:viewItem' rating.item.id %}">{{rating.item.name}}</a></td>
+                    <td class="star"><div id="rating-{{rating.item.id}}" score="{{rating.value}}"><div style="display: none;">{{rating.value}}</div></div></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
 {% else %}
-	<p>No ratings yet!</p>
+    <p>No ratings yet!</p>
 {% endif %}
 
 {% endblock %}

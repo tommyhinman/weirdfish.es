@@ -1,0 +1,116 @@
+body {
+	font-family: Verdana, Helvetica, sans-serif;
+}
+
+#pretty-table
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 45px;
+	width: 480px;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+#pretty-table th
+{
+	font-size: 16px;
+	font-weight: normal;
+	padding: 10px 8px;
+	color: black;
+	background: #d0dafd;
+	border: 1px solid black;
+	text-align: center;
+}
+
+#pretty-table th:hover
+{
+	background: #e0eafd;
+}
+
+#pretty-table td
+{
+	padding: 8px;
+	border: 1px solid black;
+	text-align:center;
+}
+
+#pretty-table tr:hover td
+{
+	background: #FFFFFF;
+	color: #228;
+}
+
+#pretty-table .rating1
+{
+	background: #DDB791;
+}
+
+#pretty-table .rating2
+{
+	background: #FF8E8E;
+}
+
+#pretty-table .rating3
+{
+	background: #F0B9C8;
+}
+
+#pretty-table .rating4
+{
+	background: #FFD062;
+}
+
+#pretty-table .rating5
+{
+	background: #FFF06A;
+}
+
+#pretty-table .rating6
+{
+	background: #C0FF97;
+}
+
+#pretty-table .rating7
+{
+	background: #B4D1B6;
+}
+
+#pretty-table .rating8
+{
+	background: #8EB4E6;
+}
+
+#pretty-table .rating9
+{
+	background: #7BCAE1;
+}
+
+#pretty-table .rating10
+{
+	background: #D0BCFE;
+}
+
+#pretty-table a:link
+{
+	text-decoration: none;
+	color: black;
+}
+
+#pretty-table a:visited
+{
+	text-decoration: none;
+	color: black;
+}
+
+#pretty-table a:active
+{
+	text-decoration: none;
+}
+
+#pretty-table a:hover
+{
+	text-decoration: none;
+	color: red;
+}

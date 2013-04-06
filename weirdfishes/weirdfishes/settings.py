@@ -83,6 +83,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'dajaxice.finders.DajaxiceFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -92,8 +93,20 @@ SECRET_KEY = '_0iu)_f828$9aw3g&%pk+cbbz^)*v3yu-d@2u=)0v3_9k%#6s4'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    'django.template.loaders.eggs.Loader',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
+)
+
+DAJAXICE_MEDIA_PREFIX="dajaxice"
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -127,6 +140,8 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     'django_openid_auth',
+    'dajax',
+    'dajaxice',
     'polls',
     'ratings',
 )
@@ -150,20 +165,46 @@ OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 # more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
     'handlers': {
+        'default': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/weirdfishes.log',
+            'maxBytes': 1024*1024*5, #5 MB
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'request_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/django_request.log',
+            'maxBytes': 1024*1024*5, #5 MB
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
     },
     'loggers': {
+        '': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
