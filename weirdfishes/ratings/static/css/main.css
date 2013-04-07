@@ -6,7 +6,6 @@ body {
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;
-	margin: 45px;
 	text-align: left;
 	border-collapse: collapse;
 	border: 1px solid black;
@@ -37,8 +36,6 @@ body {
 
 #pretty-table tr:hover td
 {
-	background: #FFFFFF;
-	color: #228;
 }
 
 #pretty-table .rating1
