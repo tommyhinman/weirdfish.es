@@ -1,8 +1,19 @@
 body {
+	padding-top: 40px;
+}
+@media screen and (max-width: 768px) {
+	body { padding-top: 0px; }
+}
+
+.controls {
+	margin-bottom: 10px;
+}
+
+/*/*body {
 	font-family: Verdana, Helvetica, sans-serif;
 }
 
-#pretty-table
+#ratings-table
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;
@@ -11,7 +22,7 @@ body {
 	border: 1px solid black;
 }
 
-#pretty-table th
+#ratings-table th
 {
 	font-size: 16px;
 	font-weight: normal;
@@ -22,90 +33,90 @@ body {
 	text-align: center;
 }
 
-#pretty-table th:hover
+#ratings-table th:hover
 {
 	background: #e0eafd;
 }
 
-#pretty-table td
+#ratings-table td
 {
 	padding: 8px;
 	border: 1px solid black;
 	text-align:center;
 }
 
-#pretty-table tr:hover td
+#ratings-table tr:hover td
 {
 }
-
-#pretty-table .rating1
+*/
+#ratings-table .rating1
 {
 	background: #DDB791;
 }
 
-#pretty-table .rating2
+#ratings-table .rating2
 {
 	background: #FF8E8E;
 }
 
-#pretty-table .rating3
+#ratings-table .rating3
 {
 	background: #F0B9C8;
 }
 
-#pretty-table .rating4
+#ratings-table .rating4
 {
 	background: #FFD062;
 }
 
-#pretty-table .rating5
+#ratings-table .rating5
 {
 	background: #FFF06A;
 }
 
-#pretty-table .rating6
+#ratings-table .rating6
 {
 	background: #C0FF97;
 }
 
-#pretty-table .rating7
+#ratings-table .rating7
 {
 	background: #B4D1B6;
 }
 
-#pretty-table .rating8
+#ratings-table .rating8
 {
 	background: #8EB4E6;
 }
 
-#pretty-table .rating9
+#ratings-table .rating9
 {
 	background: #7BCAE1;
 }
 
-#pretty-table .rating10
+#ratings-table .rating10
 {
 	background: #D0BCFE;
 }
 
-#pretty-table a:link
+#ratings-table a:link
 {
 	text-decoration: none;
 	color: black;
 }
 
-#pretty-table a:visited
+#ratings-table a:visited
 {
 	text-decoration: none;
 	color: black;
 }
 
-#pretty-table a:active
+#ratings-table a:active
 {
 	text-decoration: none;
 }
 
-#pretty-table a:hover
+#ratings-table a:hover
 {
 	text-decoration: none;
 	color: red;

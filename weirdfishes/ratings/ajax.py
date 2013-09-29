@@ -1,10 +1,11 @@
 from django.utils import simplejson
+from django.core import serializers
 from dajaxice.decorators import dajaxice_register
 from dajax.core import Dajax
 import logging
 import re
 
-from models import Rating
+from models import Rating, Artist
 
 logger = logging.getLogger('weirdfishes.ratings')
 
@@ -35,3 +36,24 @@ def rate_item(request, data):
 	rating.save()
 
 	return dajax.json()
+
+@dajaxice_register
+def get_artist_list(request, data):
+	dajax = Dajax()
+	data = simplejson.loads(data)
+	nameStartsWith = data['name_starts_with']
+	
+	maxRows = data['max_rows']
+	try:
+		maxRows = int(maxRows)
+		if(maxRows > 25):
+			maxRows = 25
+	except ValueError:
+		maxRows = 10
+
+	logger.debug('Getting [%d]artists that start with [%s] ' % (maxRows, nameStartsWith))
+
+	artistList = Artist.objects.filter(name__istartswith=nameStartsWith)[:maxRows]
+	serializedArtistList = serializers.serialize('json', artistList)
+	logger.debug(serializedArtistList)
+	return serializedArtistList

@@ -5,7 +5,7 @@
     <script type="text/javascript">
         $(document).ready(
             function() { 
-                $("#pretty-table").tablesorter(); 
+                $("#ratings-table").tablesorter(); 
                 $("tbody").find("tr").find("td.star").find("div").each(function() {
                     $(this).raty({
                         path     : '{{STATIC_URL}}img',
@@ -38,8 +38,27 @@
                         $('#yearFilterPicker').append($('<option />').val(i).html(i));
                     }
                 }
+                //Initialize autocomplete
+                $('#enterArtist').autocomplete({
+                    source: function( request, response ) {
+                        data = {
+                          name_starts_with: request.term,
+                          max_rows: 15,
+                        };
+                        var serializedData = JSON.stringify(data);
+                        var ret = Dajaxice.ratings.get_artist_list(callback, {'data': serializedData});
+                    },
+                    minLength: 1
+                });
+
             } 
         );
+
+        function callback(data) {
+            alert(data[0].fields.name);
+            console.log("my object: %o", data);
+            console.log("one element: %o", data[0]);
+        }
 
         function rate_item(item_id, value) {
 
@@ -84,11 +103,12 @@
     <div style="padding: 0px 0px 10px 0px;">
         <label for="yearFilterPicker">Filter by Year: </label>
         <select name="yearFilterPicker" id="yearFilterPicker" onchange="filterByYear(this.options[this.selectedIndex].value);"></select>
+        <!-- <div><label for="enterArtist">Artist: </label><input id="enterArtist" /></div> -->
     </div>
 
     {% if ratingList %}
 
-        <table id="pretty-table" cellpadding="4">
+        <table id="ratings-table" class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th scope="col">Artist</th>

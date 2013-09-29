@@ -1,52 +1,90 @@
 {% extends 'ratings/base.html' %}
 
+
+{% block extraheaders %}
+  <script type="text/javascript">
+    $(document).ready(
+      function() { 
+        $("#items-table").tablesorter(); 
+      }
+    );
+  </script>
+{% endblock %}
+
 {% block body %}
+
+<div class="row">
 
 <h3>{{ artist.name }}</h3>
 
 {% if itemList %}
-    <ul>
-    {% for item in itemList %}
-        <li><a href="{% url 'ratings:viewItem' item.id %}">{{ item.name }} - ({{ item.release_date }})</a></li>
-    {% endfor %}
-	</ul>
-{% else %}
-    <p>No items available for this artist.</p>
+  <table id="items-table" class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Album</th>
+        <th scope="col">Release Date</th>
+        <th scope="col">Average Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in itemList %}
+        <tr>
+          <td><a href="{% url 'ratings:viewItem' item.id %}">{{ item.name }}</a></td>
+          <td>{{ item.release_date }}</td>
+          <td>{{ item.average_rating}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endif %}
 
 
-<h3>Add item</h3>
-<form action="{% url 'ratings:addItem' %}" method="post">
-	{% csrf_token %}
-	<table>
-		<tr>
-			<td><label for="artist_id">Artist: </label></td>
-			<td><input type="text" name="artist_id" id="artist_id" value="{{ artist.id }}" readonly /></td>
-		</tr>
-		<tr>
-			<td><label for="item_name">Name: </label></td>
-			<td><input type="text" name="item_name" id="item_name" /></td>
-		</tr>
-		<tr>
-			<td><label for="item_type">Item Type: </label></td>
-			<td><select name="item_type" id="item_type">
-			{% for itemTypeKey, itemTypeVal in itemTypeList %}
-				<option value="{{ itemTypeKey }}">{{ itemTypeVal }}</option>
-			{% endfor %}
-			</select></td>
-		</tr>
-		<tr>
-			<td><label for="release_date">Release Date: </label></td>
-			<td><input id="release_date" name="release_date" ></input></td>
-		</tr>
-	</table>
 
-	<input type="submit" value="Submit" />
+<form class="form-horizontal" action="{% url 'ratings:addItem' %}" method="post">
+  <legend>Add Item</legend>
+  {% csrf_token %}
+  <div class="control-group">
+    <input id="artist_id" name="artist_id" value="{{ artist.id }}" type="hidden" >
+
+    <label class="control-label" for="artist_id">Artist: </label>
+    <div class="controls">
+      <input type="text" name="artist_name" id="artist_name" value="{{ artist.name }}" readonly />
+    </div>
+
+    <label class="control-label" for="item_name">Name: </label>
+    <div class="controls">
+      <input type="text" name="item_name" id="item_name" />
+    </div>
+
+    <label class="control-label" for="item_type">Item Type: </label>
+    <div class="controls">
+      <select name="item_type" id="item_type">
+      {% for itemTypeKey, itemTypeVal in itemTypeList %}
+        <option value="{{ itemTypeKey }}">{{ itemTypeVal }}</option>
+      {% endfor %}
+      </select>
+    </div>
+    
+    <label class="control-label" for="release_date">Release Date: </label>
+    <div class="controls">
+      <input id="release_date" name="release_date" type="text"></input>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <input type="submit" value="Submit" class="btn btn-primary"/>
+    </div>
+  </div>  
+
 
 </form>
 
 <script>
-	$( "#release_date" ).datepicker({ dateFormat: "yy-mm-dd" });
+  $( "#release_date" ).datepicker({ dateFormat: "yy-mm-dd" });
 </script>
 
+
+
+</div>
 {% endblock %}
