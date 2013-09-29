@@ -9,6 +9,25 @@ body {
 	margin-bottom: 10px;
 }
 
+.btn-toolbar {
+	width: 100px;
+}
+
+
+#items-table th {
+	text-align: center;
+}
+
+#items-table td {
+	vertical-align: middle;
+	text-align: center;
+}
+
+td .input-append {
+	margin-bottom: 0px;
+}
+
+
 /*/*body {
 	font-family: Verdana, Helvetica, sans-serif;
 }

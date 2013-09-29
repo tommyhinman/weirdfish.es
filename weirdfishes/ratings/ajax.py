@@ -5,7 +5,7 @@ from dajax.core import Dajax
 import logging
 import re
 
-from models import Rating, Artist
+from models import Rating, Artist, Item
 
 logger = logging.getLogger('weirdfishes.ratings')
 
@@ -31,7 +31,8 @@ def rate_item(request, data):
 		rating = Rating.objects.get( user=user, item=itemId )
 		rating.value = ratingValue
 	except (Rating.DoesNotExist):
-		rating = Rating( user=user, item=itemId, value=ratingValue )
+		item = Item.objects.get(id=itemId)
+		rating = Rating( user=user, item=item, value=ratingValue )
 
 	rating.save()
 

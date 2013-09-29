@@ -19,7 +19,7 @@
                             return $(this).attr('score') / 2;
                         },
                         click    : function(score, evt) {
-                            rate_item($(this).attr('id'), score);
+                            rate_item($(this).attr('id'), score * 2, rating_callback);
                         },
                         readOnly : function() {
                             return !viewingSelf(); 
@@ -38,41 +38,14 @@
                         $('#yearFilterPicker').append($('<option />').val(i).html(i));
                     }
                 }
-                //Initialize autocomplete
-                $('#enterArtist').autocomplete({
-                    source: function( request, response ) {
-                        data = {
-                          name_starts_with: request.term,
-                          max_rows: 15,
-                        };
-                        var serializedData = JSON.stringify(data);
-                        var ret = Dajaxice.ratings.get_artist_list(callback, {'data': serializedData});
-                    },
-                    minLength: 1
-                });
 
             } 
         );
 
-        function callback(data) {
-            alert(data[0].fields.name);
-            console.log("my object: %o", data);
-            console.log("one element: %o", data[0]);
-        }
-
-        function rate_item(item_id, value) {
-
-            value = value * 2;
-            data = {
-                item_id : item_id,
-                value   : value,
-            };
-            var serializedData = JSON.stringify(data);
-            Dajaxice.ratings.rate_item(Dajax.process, {'data': serializedData});
-
+        function rating_callback(item_id, value) {
             var curRow = $('#' + item_id).closest('tr');
             if( curRow.attr('class') != ('rating' + value)) {
-                curRow.switchClass(curRow.attr('class'), 'rating' + value, 1000, "easeInOutQuad");
+            curRow.switchClass(curRow.attr('class'), 'rating' + value, 1000, "easeInOutQuad");
             }
             $('#' + item_id).next().html(value);
             $("#pretty-table").trigger('update');

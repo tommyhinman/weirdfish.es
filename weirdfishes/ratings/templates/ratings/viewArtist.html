@@ -8,6 +8,32 @@
         $("#items-table").tablesorter(); 
       }
     );
+
+    // $("rating-cell").each( function() {
+    //   $(this).closest("form").click(function(e) {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //   }
+    // }
+    // );
+
+    function add_to_list_callback(button_id, value) {
+      // Change the "Add to List" button as "Added" and disable.
+      $("#"+button_id).addClass('btn-disabled');
+      $("#"+button_id).attr('disabled', 'disabled');
+      $("#"+button_id).prop('disabled', true);
+      $("#"+button_id).html("Added");
+    }
+
+    function rate_button_clicked(item_id) {
+      var ratingValue = $("#rating-"+item_id).val();
+      rate_item("rating-"+item_id, ratingValue, rate_item_callback);
+    }
+
+    function rate_item_callback(button_id, value) {
+      $("#"+button_id).closest("div").addClass("success", 200, "easeInOutQuad");
+    }
+
   </script>
 {% endblock %}
 
@@ -24,14 +50,27 @@
         <th scope="col">Album</th>
         <th scope="col">Release Date</th>
         <th scope="col">Average Rating</th>
+        <th scope="col">Your Rating</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       {% for item in itemList %}
         <tr>
-          <td><a href="{% url 'ratings:viewItem' item.id %}">{{ item.name }}</a></td>
+          <td><a href="{% url 'ratings:viewItem' item.id %}" tabindex="-1">{{ item.name }}</a></td>
           <td>{{ item.release_date }}</td>
           <td>{{ item.average_rating}}</td>
+          <td id="rating-cell">
+            <div class="input-append control-group" id="rating-control-group-{{item.id}}">
+              <input class="input-mini" id="rating-{{item.id}}" type="text" value="{{item.userRating}}" style="text-align:center;">
+              <button type="button" class="btn" onclick="rate_button_clicked({{item.id}});">Rate</button>
+            </div>
+          </td>
+          <td><div class="btn-toolbar"><div class="btn-group">
+            {% if not item.inUsersList %}
+              <a id="rating-{{item.id}}" class="btn" onclick="rate_item('rating-'+{{ item.id }}, 0, add_to_list_callback);">Add to List</a>
+            {% endif %}
+          </div></div></td>
         </tr>
       {% endfor %}
     </tbody>

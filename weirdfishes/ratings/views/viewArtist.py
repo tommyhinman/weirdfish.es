@@ -8,10 +8,17 @@ from ratings.models import Artist, Item, Rating
 def viewArtist(request, artist_id):
 	artist = get_object_or_404(Artist, pk=artist_id)
 	itemList = Item.objects.filter(artist=artist)
+	user = request.user
 
 	for item in itemList:
 		ratingAverage = Rating.objects.filter(item=item).aggregate(Avg('value'))['value__avg']
-		item.average_rating = round(ratingAverage)
+		item.inUsersList = Rating.objects.filter(user=user).filter(item=item).exists()
+
+		if item.inUsersList:
+			item.userRating = Rating.objects.filter(user=user).filter(item=item).get().value
+		else:
+			item.userRating = ""
+		item.average_rating = round(ratingAverage) if (ratingAverage is not None) else 0
 
 	itemTypeList = Item.ITEM_TYPES
 
