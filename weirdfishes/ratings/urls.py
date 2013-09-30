@@ -24,9 +24,12 @@ urlpatterns = patterns('',
     #Add Artist /addArtist
     url(r'^addArtist/$', views.addArtist, name='addArtist'),
 
-    #View User
+    #View User /viewUser/123
     url(r'^viewUser/(?P<user_id>\d+)/$', views.viewUser, name='viewUser'),
 
-    #View All Users
+    #View All Users /viewAllUsers
     url(r'^viewAllUsers/$', views.viewAllUsers, name='viewAllUsers'),
+
+    #Search
+    url(r'^search', views.search, name='search'),
 )

@@ -32,11 +32,7 @@
 
     function rate_item_callback(item_id, value) {
       $("#rating-"+item_id).closest("div").addClass("success", 200, "easeInOutQuad");
-    }
-
-    function renderRatingList() {
-      Dajaxice.ratings.render_rating_list(Dajax.process)
-    }
+    }{%}
 
   </script>
 {% endblock %}

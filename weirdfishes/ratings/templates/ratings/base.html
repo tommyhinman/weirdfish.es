@@ -64,7 +64,9 @@
             
           </ul>
 
-          <form class="navbar-search pull-right"><input type="text" class="search-query" placeholder="Search (does nothing yet)" /></form>
+          <form class="navbar-search pull-right" method="get" action="{% url 'ratings:search' %}">
+            <input type="text" class="search-query" name="q" id="searchQuery" placeholder="Search (User, Artist, Item)" >
+          </form>
         </div>
       </div>
     </div>

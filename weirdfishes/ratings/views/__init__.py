@@ -7,3 +7,4 @@ from viewArtist import *
 from viewItem import *
 from viewUser import *
 from viewAllUsers import *
+from search import *

@@ -1,0 +1,69 @@
+{% extends 'ratings/base.html' %}
+
+{% block extraheaders %}
+
+<script type="text/javascript">
+	// $(function() {
+	// 	$('#search-tabs a:last').tab('show');
+	// });
+	$('#search-tabs a').click(function(e) {
+		alert('hi');
+		e.preventDefault();
+		$(this).tab('show');
+	})
+</script>
+
+{% endblock %}
+
+
+
+{% block body %}
+
+<h3>Search Results</h3>
+
+<ul class="nav nav-tabs" id="search-tabs">
+	<li class="active"><a href="#users" data-toggle="tab">Users</a></li>
+	<li><a href="#items" data-toggle="tab">Items</a></li>
+	<li><a href="#artists" data-toggle="tab">Artists</a></li>
+</ul>
+
+<div class="tab-content" >
+<div class="tab-pane active" id="users">
+{% if userList %}
+{% for user in userList %}
+	<p><a href="{% url 'ratings:viewUser' user.id %}"> {{user}} </a></p>
+{% endfor %}
+{% endif %}
+</div>
+
+<div class="tab-pane" id="items">
+{% if itemList %}
+{% for item in itemList %}
+	<p><a href="{% url 'ratings:viewItem' item.id %}">{{item.name}} </a></p>
+{% endfor %}
+{% endif %}
+</div>
+
+<div class="tab-pane" id="artists">
+{% if artistList %}
+{% for artist in artistList %}
+	<p><a href="{% url 'ratings:viewArtist' artist.id %}"> {{artist.name}} </a></p>
+{% endfor %}
+{% endif %}
+</div>
+</div>
+
+<script type="text/javascript">
+	// $(function() {
+	// 	$('#search-tabs a:last').tab('show');
+	// });
+	$('#search-tabs a').click(function(e) {
+		//alert('hi');
+		//e.preventDefault();
+		$(this).tab('show');
+	})
+</script>
+
+
+
+{% endblock %}
