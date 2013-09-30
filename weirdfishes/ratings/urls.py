@@ -26,4 +26,7 @@ urlpatterns = patterns('',
 
     #View User
     url(r'^viewUser/(?P<user_id>\d+)/$', views.viewUser, name='viewUser'),
+
+    #View All Users
+    url(r'^viewAllUsers/$', views.viewAllUsers, name='viewAllUsers'),
 )

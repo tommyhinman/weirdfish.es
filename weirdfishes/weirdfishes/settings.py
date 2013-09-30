@@ -158,6 +158,8 @@ LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
+AUTH_PROFILE_MODULE='ratings.UserProfile'
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.

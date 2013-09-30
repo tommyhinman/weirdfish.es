@@ -6,3 +6,4 @@ from rateItem import *
 from viewArtist import *
 from viewItem import *
 from viewUser import *
+from viewAllUsers import *

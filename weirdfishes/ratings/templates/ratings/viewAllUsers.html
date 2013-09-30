@@ -1,0 +1,34 @@
+{% extends 'ratings/base.html' %}
+
+{% block extraheaders %}
+
+{% endblock %}
+
+
+
+{% block body %}
+
+
+<h3>All Users</h3>
+
+{% if userList %}
+	<table id="users-table" class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th scope="col">Username</th>
+				<th scope="col">Rating Count</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in userList %}
+				<tr>
+					<td><a href="{% url 'ratings:viewUser' user.id %}">{{user}}</a></td>
+					<td>{{user.rating_count}}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endif %}
+
+
+{% endblock %}

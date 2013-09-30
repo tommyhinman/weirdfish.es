@@ -24,13 +24,6 @@ class Item(models.Model):
 	def __unicode__(self):
 		return self.name
 
-# class User(models.Model):
-# 	name = models.CharField(max_length=255)
-# 	nickname = models.CharField(max_length=255)
-
-# 	def __unicode__(self):
-# 		return self.name
-
 class Rating(models.Model):
 	user = models.ForeignKey(User)
 	item = models.ForeignKey(Item)
@@ -39,3 +32,7 @@ class Rating(models.Model):
 
 	def __unicode__(self):
 		return 'Rating: {0}'.format(self.value)
+
+class UserProfile(models.Model):
+	user = models.ForeignKey(User, unique=True)
+	nickname = models.CharField(max_length=100, blank=True, null=True)
