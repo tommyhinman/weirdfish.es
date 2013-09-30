@@ -1,5 +1,6 @@
 from addArtist import *
 from addItem import *
+from deleteItem import *
 from index import *
 from rateItem import *
 from viewArtist import *

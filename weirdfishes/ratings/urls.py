@@ -18,6 +18,9 @@ urlpatterns = patterns('',
     #Add Item /addItem
     url(r'^addItem/$', views.addItem, name='addItem'),
 
+    #Delete Item /deleteItem
+    url(r'^item/(?P<item_id>\d+)/deleteItem/$', views.deleteItem, name='deleteItem'),
+
     #Add Artist /addArtist
     url(r'^addArtist/$', views.addArtist, name='addArtist'),
 

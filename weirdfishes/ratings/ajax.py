@@ -7,7 +7,7 @@ from dajax.core import Dajax
 
 import logging
 import re
-from datetime import datetime
+from datetime import date, timedelta, datetime
 
 from models import Rating, Artist, Item, User
 
@@ -30,13 +30,15 @@ def rate_item(request, data):
 
 	logger.debug('Rating item id [%s] value [%d] for user [%s]' % (itemId, ratingValue, user.username))
 
+	ratedDate = datetime.today()
 	# Update the rating if it exists, otherwise create it
 	try:
 		rating = Rating.objects.get( user=user, item=itemId )
 		rating.value = ratingValue
+		rating.created_datetime = ratedDate
 	except (Rating.DoesNotExist):
 		item = Item.objects.get(id=itemId)
-		rating = Rating( user=user, item=item, value=ratingValue )
+		rating = Rating( user=user, item=item, value=ratingValue, created_datetime=ratedDate )
 
 	rating.save()
 
@@ -64,11 +66,20 @@ def get_artist_list(request, data):
 	return serializedArtistList
 
 @dajaxice_register
-def render_rating_list(request, user_id, year_filter):
+def render_rating_list(request, user_id, year_filter, viewUnrated, viewRecentlyRated):
 	dajax = Dajax()
 
 	userToView = get_object_or_404(User, pk=user_id)
 	ratingList = Rating.objects.filter(user=user_id)
+
+	if(viewUnrated):
+		ratingList = ratingList.filter(value=0)
+
+	if(viewRecentlyRated):
+		today = datetime.today()
+		dateRangeStart = today - timedelta(days=14)
+		ratingList = ratingList.filter(created_datetime__gte=dateRangeStart)
+		ratingList = ratingList.order_by('created_datetime').reverse()
 
 	if(year_filter):
 		try:

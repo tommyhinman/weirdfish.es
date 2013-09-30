@@ -5,9 +5,6 @@
     <script type="text/javascript">
         $(document).ready(
             function() { 
-               
-
-
                 // Initialize the year filter picker
                 $('#yearFilterPicker').append('<option value="all">all</option>');
                 $('#yearFilterPicker').append('<optgroup label="----"/>');
@@ -42,21 +39,16 @@
             {% endif %}
         }
 
-        function filterByYear(year) {
-            // if(year == "all") {
-            //     window.location = "{% url 'ratings:viewUser' userToView.id %}";
-            // }
-            // window.location = "{% url 'ratings:viewUser' userToView.id %}" + "?yearFilter=" + year;
-            //alert('test');
-
-        }
-
         function renderRatingList() {
             var yearFilter = $('#yearFilterPicker option:selected').val();
+            var viewUnrated = $('#viewUnrated').is(':checked');
+            var viewRecentlyRated = $('#viewRecentlyRated').is(':checked');
 
             var data = {
                 'user_id': {{userToView.id}},
                 'year_filter': yearFilter,
+                'viewUnrated': viewUnrated,
+                'viewRecentlyRated': viewRecentlyRated,
             };
             
             $('#ratingList').html('');
@@ -96,14 +88,20 @@
 {% endblock %}
 
 {% block body %}
-
-<div style="margin: 45px;">
-    <h3 style="padding: 0px 0px 10px 0px;">Ratings for {{userToView.username}}</h3>
-    <div style="padding: 0px 0px 10px 0px;">
+    <h3>Ratings for {{userToView.username}}</h3>
+    <form class="form-inline">
+        <div class="form-actions">
         <label for="yearFilterPicker">Filter by Year: </label>
         <select name="yearFilterPicker" id="yearFilterPicker" onchange="renderRatingList();"></select>
+        <label class="checkbox inline" id="rating-filter" >
+            <input type="checkbox" id="viewUnrated" onchange="renderRatingList();"> View Unrated
+        </label>
+        <label class="checkbox inline" id="rating-filter">
+            <input type="checkbox" id="viewRecentlyRated" onchange="renderRatingList();">View Recently Rated
+        </label>
         <!-- <div><label for="enterArtist">Artist: </label><input id="enterArtist" /></div> -->
-    </div>
+        </div>
+    </form>
 
     {% if ratingList %}
 
@@ -112,6 +110,5 @@
     {% else %}
         <p>No ratings yet!</p>
     {% endif %}
-</div>
 
 {% endblock %}

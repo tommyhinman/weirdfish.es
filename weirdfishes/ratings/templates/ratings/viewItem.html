@@ -11,6 +11,12 @@
 	<input type="submit" value="Rate" />
 </form>
 
+<form action="{% url 'ratings:deleteItem' item.id %}" method="post">
+	{% csrf_token %}
+	<input type="hidden" name="artist_id" id="artist_id" value="{{artist.id}}">
+	<input type="submit" value="Delete Item" class="btn-danger">
+</form>
+
 <h3>Ratings:</h3>
 {% if ratingList %}
     <ul>

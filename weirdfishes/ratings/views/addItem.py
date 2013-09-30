@@ -17,5 +17,5 @@ def addItem(request):
 	item.save()
 	itemId = item.pk
 
-	return HttpResponseRedirect(reverse('ratings:viewItem', args=(itemId,)))
+	return HttpResponseRedirect(reverse('ratings:viewArtist', args=(artist.id,)))
 
