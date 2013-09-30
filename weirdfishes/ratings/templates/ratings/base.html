@@ -14,6 +14,8 @@
   <script type="text/javascript" src="{{STATIC_URL}}js/jquery.ba-serializeobject.min.js"></script>
   <script type="text/javascript" src="{{STATIC_URL}}js/jquery.raty.js"></script>
   <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}js/spin.min.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}js/jquery.spin.js"></script>
 
   <script type="text/javascript">
     function my_js_callback(data) {
@@ -42,7 +44,7 @@
             <li class="divider-vertical" />
             <li><a href="#">stuff</a></li>
             <li class="divider-vertical" />
-            <li><a href="#">stuff</a></li>
+            <li><a href="{% url 'ratings:viewUser' user.id %}">My Ratings</a></li>
             <li class="divider-vertical" />
 
             {% if user.is_authenticated %}
@@ -62,7 +64,7 @@
             
           </ul>
 
-          <form class="navbar-search pull-right"><input type="text" class="search-query" placeholder="Search" /></form>
+          <form class="navbar-search pull-right"><input type="text" class="search-query" placeholder="Search (does nothing yet)" /></form>
         </div>
       </div>
     </div>

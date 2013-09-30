@@ -5,27 +5,8 @@
     <script type="text/javascript">
         $(document).ready(
             function() { 
-                $("#ratings-table").tablesorter(); 
-                $("tbody").find("tr").find("td.star").find("div").each(function() {
-                    $(this).raty({
-                        path     : '{{STATIC_URL}}img',
-                        size     : 24,
-                        half     : true,
-                        starHalf : 'star-half-big.png',
-                        starOff  : 'star-off-big.png',
-                        starOn   : 'star-on-big.png',
-                        cancel   : 'true',
-                        score    : function() {
-                            return $(this).attr('score') / 2;
-                        },
-                        click    : function(score, evt) {
-                            rate_item($(this).attr('id'), score * 2, rating_callback);
-                        },
-                        readOnly : function() {
-                            return !viewingSelf(); 
-                        }
-                    });
-                });
+               
+
 
                 // Initialize the year filter picker
                 $('#yearFilterPicker').append('<option value="all">all</option>');
@@ -39,15 +20,17 @@
                     }
                 }
 
+                renderRatingList();
+
             } 
         );
 
         function rating_callback(item_id, value) {
-            var curRow = $('#' + item_id).closest('tr');
+            var curRow = $('#rating-' + item_id).closest('tr');
             if( curRow.attr('class') != ('rating' + value)) {
             curRow.switchClass(curRow.attr('class'), 'rating' + value, 1000, "easeInOutQuad");
             }
-            $('#' + item_id).next().html(value);
+            $('#rating-' + item_id).next().html(value);
             $("#pretty-table").trigger('update');
         }
 
@@ -60,10 +43,53 @@
         }
 
         function filterByYear(year) {
-            if(year == "all") {
-                window.location = "{% url 'ratings:viewUser' userToView.id %}";
-            }
-            window.location = "{% url 'ratings:viewUser' userToView.id %}" + "?yearFilter=" + year;
+            // if(year == "all") {
+            //     window.location = "{% url 'ratings:viewUser' userToView.id %}";
+            // }
+            // window.location = "{% url 'ratings:viewUser' userToView.id %}" + "?yearFilter=" + year;
+            //alert('test');
+
+        }
+
+        function renderRatingList() {
+            var yearFilter = $('#yearFilterPicker option:selected').val();
+
+            var data = {
+                'user_id': {{userToView.id}},
+                'year_filter': yearFilter,
+            };
+            
+            $('#ratingList').html('');
+            $('#ratingList').spin('small');
+            Dajaxice.ratings.render_rating_list(renderRatingListCallback, data);
+
+        }
+
+        function renderRatingListCallback(data) {
+            Dajax.process(data);
+            $("#ratings-table").tablesorter(); 
+            $("tbody").find("tr").find("td.star").find("div").each(function() {
+                $(this).raty({
+                    path     : '{{STATIC_URL}}img',
+                    size     : 24,
+                    half     : true,
+                    starHalf : 'star-half-big.png',
+                    starOff  : 'star-off-big.png',
+                    starOn   : 'star-on-big.png',
+                    cancel   : 'true',
+                    score    : function() {
+                        return $(this).attr('score') / 2;
+                    },
+                    click    : function(score, evt) {
+                        var item_id = $(this).attr('id').replace("rating-", "");
+
+                        rate_item(item_id, score * 2, rating_callback);
+                    },
+                    readOnly : function() {
+                        return !viewingSelf(); 
+                    }
+                });
+            });
         }
     </script>   
 
@@ -75,34 +101,13 @@
     <h3 style="padding: 0px 0px 10px 0px;">Ratings for {{userToView.username}}</h3>
     <div style="padding: 0px 0px 10px 0px;">
         <label for="yearFilterPicker">Filter by Year: </label>
-        <select name="yearFilterPicker" id="yearFilterPicker" onchange="filterByYear(this.options[this.selectedIndex].value);"></select>
+        <select name="yearFilterPicker" id="yearFilterPicker" onchange="renderRatingList();"></select>
         <!-- <div><label for="enterArtist">Artist: </label><input id="enterArtist" /></div> -->
     </div>
 
     {% if ratingList %}
 
-        <table id="ratings-table" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Artist</th>
-                    <th scope="col">Album</th>
-                    <th scope="col">Release Date</th>
-                    <th scope="col">Rating</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for rating in ratingList %}
-                    <tr class="rating{{rating.value}}">
-                        <td><a href="{% url 'ratings:viewArtist' rating.item.artist.id %}">{{rating.item.artist.name}}</a></td>
-                        <td><a href="{% url 'ratings:viewItem' rating.item.id %}">{{rating.item.name}}</a></td>
-                        <td>{{rating.item.release_date | date:"m/d/Y" }}</td>
-                        <td class="star"><div id="rating-{{rating.item.id}}" score="{{rating.value}}"></div><div style="display: none;">{{rating.value}}</div></td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-
+        <div id="ratingList"> stuff </div>
 
     {% else %}
         <p>No ratings yet!</p>

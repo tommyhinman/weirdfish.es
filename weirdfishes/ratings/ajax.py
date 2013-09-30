@@ -1,11 +1,15 @@
 from django.utils import simplejson
 from django.core import serializers
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from dajaxice.decorators import dajaxice_register
 from dajax.core import Dajax
+
 import logging
 import re
+from datetime import datetime
 
-from models import Rating, Artist, Item
+from models import Rating, Artist, Item, User
 
 logger = logging.getLogger('weirdfishes.ratings')
 
@@ -20,7 +24,7 @@ def rate_item(request, data):
 
 	dajax = Dajax()
 	unserializedData = simplejson.loads(data)
-	itemId = re.findall(r'rating-([^E]+)', unserializedData['item_id'])[0]
+	itemId = int(unserializedData['item_id'])
 	ratingValue = int(unserializedData['value'])
 	user = request.user
 
@@ -58,3 +62,27 @@ def get_artist_list(request, data):
 	serializedArtistList = serializers.serialize('json', artistList)
 	logger.debug(serializedArtistList)
 	return serializedArtistList
+
+@dajaxice_register
+def render_rating_list(request, user_id, year_filter):
+	dajax = Dajax()
+
+	userToView = get_object_or_404(User, pk=user_id)
+	ratingList = Rating.objects.filter(user=user_id)
+
+	if(year_filter):
+		try:
+			year_filter = int(year_filter)
+			if(year_filter > 1000 and year_filter < 3000):
+				dateRangeStart = datetime(year_filter, 1, 1)
+				dateRangeEnd = datetime(year_filter, 12, 31)
+				ratingList = ratingList.filter(item__release_date__gte=dateRangeStart).filter(item__release_date__lte=dateRangeEnd)
+		except ValueError:
+			#invalid year input
+			year_filter = 0
+
+	context = {'userToView': userToView, 'ratingList': ratingList}
+	render = render_to_string('ratings/ratingList.html', context)
+	dajax.assign('#ratingList', 'innerHTML', render)
+
+	return dajax.json()
