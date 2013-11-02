@@ -142,7 +142,6 @@ INSTALLED_APPS = (
     'django_openid_auth',
     'dajax',
     'dajaxice',
-    'polls',
     'ratings',
 )
 
