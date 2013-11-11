@@ -7,6 +7,7 @@ from dajax.core import Dajax
 
 import logging
 import re
+import uuid
 from datetime import date, timedelta, datetime
 
 from models import Rating, Artist, Item, User
@@ -70,7 +71,7 @@ def render_rating_list(request, user_id, year_filter, viewUnrated, viewRecentlyR
 	dajax = Dajax()
 
 	userToView = get_object_or_404(User, pk=user_id)
-	ratingList = Rating.objects.filter(user=user_id)
+	ratingList = Rating.objects.select_related().filter(user=user_id)
 
 	if(viewUnrated):
 		ratingList = ratingList.filter(value=0)
@@ -97,3 +98,54 @@ def render_rating_list(request, user_id, year_filter, viewUnrated, viewRecentlyR
 	dajax.assign('#ratingList', 'innerHTML', render)
 
 	return dajax.json()
+
+@dajaxice_register
+def add_artists(request, data):
+	dajax = Dajax()
+	data = simplejson.loads(data)
+	count = int(data['count'])
+
+	for i in range(count):
+		artistName = ("test_artist_%d") % (uuid.uuid4())
+		artist = Artist(name=artistName)
+		artist.save()
+
+	successMessage = "Successfully added [%d] artists!" % count
+	dajax.assign('#message', 'innerHTML', successMessage)
+
+	return dajax.json()
+
+@dajaxice_register
+def add_items(request, data):
+	dajax = Dajax()
+	data = simplejson.loads(data)
+	count = int(data['count'])
+	artist_name = data['artist_name']
+
+	artist = get_object_or_404(Artist, name=artist_name)
+
+
+	for i in range(count):
+		itemName = ("test_item_%d") % (uuid.uuid4())
+		logger.debug("Making item with name [%s]" % itemName)
+
+		item = Item( artist=artist, name=itemName, release_date="1989-11-11", item_type='A')
+		item.save()
+
+	successMessage = "Successfully added [%d] items to artist [%s]" % (count, artist_name)
+	dajax.assign('#message', 'innerHTML', successMessage)
+
+	return dajax.json()
+
+@dajaxice_register
+def clear_test_data(request, data):
+	dajax = Dajax()
+
+	Item.objects.filter(name__icontains="test_item").delete()
+	Artist.objects.filter(name__icontains="test_artist").delete()
+
+	successMessage = "Successfully deleted all test data."
+	dajax.assign('#message', 'innerHTML', successMessage)
+	return dajax.json()
+
+

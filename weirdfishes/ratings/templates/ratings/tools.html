@@ -1,0 +1,88 @@
+{% extends 'ratings/base.html' %}
+
+{% block extraheaders %}
+  <script type="text/javascript">
+
+    function addArtists() {
+      var  artistCount = $("#addArtistCount").val();
+
+      data = {
+        count : artistCount,
+      };
+      var serializedData = JSON.stringify(data);
+      Dajaxice.ratings.add_artists(Dajax.process, {'data': serializedData});
+
+    }
+
+    function addItems() {
+      var itemCount = $("#addItemCount").val();
+      var itemArtist = $("#addItemArtist").val();
+      alert("count: " + itemCount)
+      data = {
+        count : itemCount,
+        artist_name : itemArtist,
+      };
+      var serializedData = JSON.stringify(data);
+      Dajaxice.ratings.add_items(Dajax.process, {'data': serializedData});
+    }
+
+    function clearTestData() {
+      Dajaxice.ratings.clear_test_data(Dajax.process, {'data':''});
+    }
+  </script>
+  
+{% endblock %}
+
+
+
+{% block body %}
+
+  <div id="message"></div>
+
+
+  <table id="tools-table" class="table table-bordered">
+  <tr>
+    <td><input class="input-mini" id="addArtistCount" type="text" value="10"></td>
+    <td><button type="button" class="btn" onclick="addArtists();">Add Artists</button></td>
+  </tr>
+
+  <tr>
+    <td><input class="input-mini" id="addItemCount" type="text" value="10">
+    <input class="input" id="addItemArtist" type="text"></td>
+    <td><button type="button" class="btn" onclick="addItems();">Add Items</button></td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td><button type="button" class="btn" onclick="clearTestData();">Clear Test Data</button></td>
+  </tr>
+  </table>
+
+  <hr>
+
+  <h3>Import Data</h3>
+  <form action="{% url 'ratings:importData' %}" method="post">
+    <legend>Import Data</legend>
+    {% csrf_token %}
+    <div class="control-group">
+
+      <label class="control-label" for="dataFormat">Data Format: </label>
+      <div class="controls">
+        <input id="dataFormat" name="dataFormat" type="text" />
+      </div>
+
+      <label class="control-label" for="data">Data:</label>
+      <div class="controls">
+        <textarea id="data" name="data" rows="6"></textarea>
+      </div>
+
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+        <input type="submit" value="Submit" class="btn btn-primary"/>
+      </div>
+    </div>
+  </form>
+  
+{% endblock %}

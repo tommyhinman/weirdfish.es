@@ -3,10 +3,16 @@ from django.shortcuts import render
 from django.db.models import Count
 from ratings.models import Artist, Item, Rating
 
-@login_required
+import logging
+
+logger = logging.getLogger('weirdfishes.ratings')
+
+# @login_required
 def index(request):
 	#if not request.user.is_authenticated():
 	#	return redirect('/google/login/?next=%s' % request.path)
+
+	logger.debug('test3')
 
 	artistList = Artist.objects.all().annotate(item_count=Count('item'))
 	# for artist in artistList:

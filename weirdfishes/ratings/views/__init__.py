@@ -1,6 +1,7 @@
 from addArtist import *
 from addItem import *
 from deleteItem import *
+from deleteArtist import *
 from index import *
 from rateItem import *
 from viewArtist import *
@@ -8,3 +9,5 @@ from viewItem import *
 from viewUser import *
 from viewAllUsers import *
 from search import *
+from tools import *
+from importData import *

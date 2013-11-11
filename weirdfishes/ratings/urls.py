@@ -2,6 +2,7 @@ from django.conf.urls import patterns, url
 
 from ratings import views
 
+
 urlpatterns = patterns('',
 	#Main page
     url(r'^$', views.index, name='index'),
@@ -21,6 +22,9 @@ urlpatterns = patterns('',
     #Delete Item /deleteItem
     url(r'^item/(?P<item_id>\d+)/deleteItem/$', views.deleteItem, name='deleteItem'),
 
+    #Delete Artist /deleteArtist
+    url(r'artist/(?P<artist_id>\d+)/deleteArtist/$', views.deleteArtist, name='deleteArtist'),
+
     #Add Artist /addArtist
     url(r'^addArtist/$', views.addArtist, name='addArtist'),
 
@@ -32,4 +36,10 @@ urlpatterns = patterns('',
 
     #Search
     url(r'^search', views.search, name='search'),
+
+    #Tools
+    url(r'^tools', views.tools, name='tools'),
+
+    #Import Data
+    url(r'^importData', views.importData, name='importData'),
 )

@@ -16,7 +16,6 @@ url(r'^login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
 url(r'^login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
 url(r'logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/',}, name='logout'),
 
-url(r'^polls/', include('polls.urls', namespace="polls")),
 url(r'^', include('ratings.urls', namespace="ratings")),
 
 url(r'^%s' % settings.DAJAXICE_MEDIA_PREFIX, include('dajaxice.urls')),

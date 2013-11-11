@@ -44,7 +44,8 @@
             <li class="divider-vertical" />
             <li><a href="{% url 'ratings:viewAllUsers' %}">User List</a></li>
             <li class="divider-vertical" />
-            <li><a href="{% url 'ratings:viewUser' user.id %}">My Ratings</a></li>
+            <li><a href="{% url 'ratings:viewUser' user.id %}">My Ratings</a>
+            <li><a href="{% url 'ratings:tools' %}">Tools</a></li>
             <li class="divider-vertical" />
 
             {% if user.is_authenticated %}
