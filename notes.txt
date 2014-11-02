@@ -1,7 +1,38 @@
+Install virtualenv and virtualenvwrapper.
+-See virtualenvwrapper.readthedocs.org/en/latest
+
+Create an env with virtualenvwrapper (I used weirdfishes-env)
+'workon <env_name>' to switch to that env
+'which pip' to check if it's working
+
+Installing req'd packages:
+-Make sure you're currently in your virtualenv
+-There's a requirements.txt file in weirdfish.es. 
+-Run pip install -r "requirements.txt" to install all required packages
+-If you add new packages make sure you update requirements.txt with the new 'pip list' output
+
+
+
+Setting up local DB settings
+-Install mysql-server with apt-get
+--Remember your root username and password, as you'll use it below
+-Install libmysqlclient-dev with apt-get
+-run mysql and run the following command: CREATE DATABASE <dbname> CHARACTER SET utf8;
+-Create a local_settings.py file in weirdfish.es/weirdfishes/weirdfishes/
+-Add the following to it:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': <database_name>,                      # Or path to database file if using sqlite3.
+        'USER': <db_root_name>,                      # Not used with sqlite3.
+        'PASSWORD': <db_root_passwd>,                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
+
+
 Needed to modify django_openid_auth to work with mysql:
 
 /Users/tommy/.virtualenvs/weirdfishes/lib/python2.7/site-packages/django_openid_auth
 -Changed claimed_id to use CharField(max_length=255, unique=True)
-
-
-Use virtualenv: workon weirdfishes
