@@ -6,6 +6,9 @@ from ratings.models import Artist, Item, Rating
 
 logger = logging.getLogger('weirdfishes.ratings')
 
+#TODO: Namespace conflicts are causing problems here. I've renamed
+#The functions for now, but this needs to be better encapsulated
+
 def processDataLine(itemData, formatInfo, user):
 
   #TODO: This code is super fragile right now, and desparately needs error checking and testing!
@@ -21,13 +24,13 @@ def processDataLine(itemData, formatInfo, user):
   logger.debug("artist: %s, album: %s, rdate: %s, rating: %s" % (artistName, albumName, releaseDate, rating))
 
   if artistName != '' and albumName != '' and releaseDate != '':
-    artist = addArtist(artistName)
-    item = addAlbum(artist, albumName, releaseDate)
+    artist = addArtistToDb(artistName)
+    item = addAlbumToDb(artist, albumName, releaseDate)
 
     if rating == '':
-      rateItem(item, user, 0)
+      rateItemInDb(item, user, 0)
     else:
-      rateItem(item, user, rating)
+      rateItemInDb(item, user, rating)
     
 def formatReleaseDate(releaseDateStr):
   try:
@@ -37,7 +40,7 @@ def formatReleaseDate(releaseDateStr):
   except:
     return ''
 
-def addArtist(artistName):
+def addArtistToDb(artistName):
   try:
     artist = Artist.objects.get(name=artistName)
   except: 
@@ -47,7 +50,7 @@ def addArtist(artistName):
   artist.save()
   return artist
 
-def addAlbum(artist, albumName, releaseDate):
+def addAlbumToDb(artist, albumName, releaseDate):
   try:
     item = Item.objects.get(artist=artist, name=albumName)
   except:
@@ -57,7 +60,7 @@ def addAlbum(artist, albumName, releaseDate):
 
   return item
 
-def rateItem(item, user, value):
+def rateItemInDb(item, user, value):
   # logger.debug("Adding rating: item [%s], user [%s], value [%s]" % (item, user, value))
   try:
     rating = Rating.objects.get(user=user, item=item)
