@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Count
 from ratings.models import Artist, Item, Rating
 
@@ -9,8 +9,8 @@ logger = logging.getLogger('weirdfishes.ratings')
 
 # @login_required
 def index(request):
-	#if not request.user.is_authenticated():
-	#	return redirect('/google/login/?next=%s' % request.path)
+	if not request.user.is_authenticated():
+		return redirect('/login/?next=%s' % request.path)
 
 	logger.debug('test3')
 
