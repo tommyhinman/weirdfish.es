@@ -22,35 +22,36 @@
 <h3>Search Results</h3>
 
 <ul class="nav nav-tabs" id="search-tabs">
-	<li class="active"><a href="#users" data-toggle="tab">Users</a></li>
-	<li><a href="#items" data-toggle="tab">Items</a></li>
-	<li><a href="#artists" data-toggle="tab">Artists</a></li>
+	
+	{% if userList %}<li {% if activeTab == 'user' %}class="active"{% endif %}><a href="#users" data-toggle="tab">Users</a></li>{% endif %}
+	{% if itemList %}<li {% if activeTab == 'item' %}class="active"{% endif %}><a href="#items" data-toggle="tab">Items</a></li>{% endif %}
+	{% if artistList %}<li {% if activeTab == 'artist' %}class="active"{% endif %}><a href="#artists" data-toggle="tab">Artists</a></li>{% endif %}
 </ul>
 
 <div class="tab-content" >
-<div class="tab-pane active" id="users">
 {% if userList %}
+<div class="tab-pane {% if activeTab == 'user' %}active{% endif %}" id="users">
 {% for user in userList %}
 	<p><a href="{% url 'ratings:viewUser' user.id %}"> {{user}} </a></p>
 {% endfor %}
-{% endif %}
 </div>
+{% endif %}
 
-<div class="tab-pane" id="items">
 {% if itemList %}
+<div class="tab-pane {% if activeTab == 'item' %}active{% endif %}" id="items">
 {% for item in itemList %}
 	<p><a href="{% url 'ratings:viewItem' item.id %}">{{item.name}} </a></p>
 {% endfor %}
-{% endif %}
 </div>
+{% endif %}
 
-<div class="tab-pane" id="artists">
 {% if artistList %}
+<div class="tab-pane {% if activeTab == 'artist' %}active{% endif %}" id="artists">
 {% for artist in artistList %}
 	<p><a href="{% url 'ratings:viewArtist' artist.id %}"> {{artist.name}} </a></p>
 {% endfor %}
-{% endif %}
 </div>
+{% endif %}
 </div>
 
 <script type="text/javascript">

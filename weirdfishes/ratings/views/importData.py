@@ -38,11 +38,12 @@ def importData(request):
 
   # logger.debug("artist: %d, album: %d, rdate: %d, rating: %d" % (artistPos, albumPos, releaseDatePos, ratingPos))
 
+  importedDataList = []
   for line in data.splitlines():
-    processDataLine(line, formatInfo, user)
+    importedDataList.append(processDataLine(line, formatInfo, user))
 
 
-  context = {}
+  context = {'importedDataList': importedDataList}
 
   return render(request, 'ratings/importData.html', context)
 

@@ -29,8 +29,10 @@ def processDataLine(itemData, formatInfo, user):
 
     if rating == '':
       rateItemInDb(item, user, 0)
+      return "Artist: %s, Album: %s, Release Date: %s, Rating %s" % (artistName, albumName, releaseDate, 0)
     else:
       rateItemInDb(item, user, rating)
+      return "Artist: %s, Album: %s, Release Date: %s, Rating %s" % (artistName, albumName, releaseDate, rating)
     
 def formatReleaseDate(releaseDateStr):
   try:

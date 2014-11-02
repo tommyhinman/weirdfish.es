@@ -4,5 +4,15 @@
 {% endblock %}
 
 {% block body %}
-hello world
+<h3>Imported Data</h3>
+
+{% if importedDataList %}
+<ul>
+	{% for importedData in importedDataList %}
+		<li>{{ importedData }}</li>
+	{% endfor %}
+</ul>
+{% endif %}
+
+
 {% endblock %}

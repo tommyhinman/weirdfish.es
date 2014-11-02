@@ -8,5 +8,17 @@ def search(request):
 	userList = User.objects.filter(username__icontains=query)
 	itemList = Item.objects.filter(name__icontains=query)
 	artistList = Artist.objects.filter(name__icontains=query)
-	context = {'userList': userList, 'artistList':artistList, 'itemList': itemList}
+	activeTab = getActiveTab(userList, itemList, artistList)
+
+	context = {'userList': userList, 'artistList':artistList, 'itemList': itemList, 'activeTab' : activeTab}
 	return render(request, 'ratings/search.html', context)
+
+def getActiveTab(userList, itemList, artistList):
+	if(artistList):
+		return "artist"
+	elif(itemList):
+		return "item"
+	elif(userList):
+		return "user"
+	else:
+		return ""
