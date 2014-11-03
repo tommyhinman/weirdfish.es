@@ -43,8 +43,10 @@
           <ul class="nav">
             <li class="divider-vertical" />
             <li><a href="{% url 'ratings:viewAllUsers' %}">User List</a></li>
+            {% if user.is_authenticated %}
             <li class="divider-vertical" />
             <li><a href="{% url 'ratings:viewUser' user.id %}">My Ratings</a>
+            {% endif %}
             <li><a href="{% url 'ratings:tools' %}">Tools</a></li>
             <li class="divider-vertical" />
 

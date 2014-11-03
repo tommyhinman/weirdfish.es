@@ -4,37 +4,63 @@
   <script type="text/javascript">
     $(document).ready(
       function() { 
-        $("#artists-table").tablesorter(); 
+
+        renderRatingList();
       }
     );
+
+    function renderRatingList() {
+      var data = {
+        'user_id': {{user.id}},
+      };
+
+      $('#ratingList').html('');
+      $('#ratingList').spin('small');
+      Dajaxice.ratings.render_listening_queue(renderRatingListCallback, data);
+    }
+
+    function rating_callback(item_id, value) {
+      var curRow = $('#rating-' + item_id).closest('tr');
+      if( curRow.attr('class') != ('rating' + value)) {
+        curRow.switchClass(curRow.attr('class'), 'rating' + value, 1000, "easeInOutQuad");
+      }
+      $('#rating-' + item_id).next().html(value);
+      $("#pretty-table").trigger('update');
+    }
+
+    function renderRatingListCallback(data) {
+      Dajax.process(data);
+      $("#ratings-table").tablesorter();
+      $("tbody").find("tr").find("td.star").find("div").each(function() {
+        $(this).raty({
+            path     : '{{STATIC_URL}}img',
+            size     : 24,
+            half     : true,
+            starHalf : 'star-half-big.png',
+            starOff  : 'star-off-big.png',
+            starOn   : 'star-on-big.png',
+            cancel   : 'true',
+            score    : function() {
+                return $(this).attr('score') / 2;
+            },
+            click    : function(score, evt) {
+                var item_id = $(this).attr('id').replace("rating-", "");
+
+                rate_item(item_id, score * 2, rating_callback);
+            },
+            readOnly : function() {
+                return false; 
+            }
+        });
+      });
+    }
   </script>
 {% endblock %}
 
 {% block body %}
-  <h3>Artist List</h3>
-
-  {% if artistList %}
-    <table id="artists-table" class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Artist</th>
-          <th scope="col">Item Count</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for artist in artistList %}
-          <tr>
-            <td><a href="{% url 'ratings:viewArtist' artist.id %}">{{ artist.name }}</a></td>
-            <td>{{ artist.item_count }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p>No artists available.</p>
-  {% endif %}
-
-
+  <h3>Listening Queue</h3>
+  
+  <div id="ratingList"> stuff </div>
 
   <form action="{% url 'ratings:addArtist' %}" method="post" class="form-horizontal">
     {% csrf_token %}

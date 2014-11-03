@@ -10,14 +10,14 @@ logger = logging.getLogger('weirdfishes.ratings')
 # @login_required
 def index(request):
 	if not request.user.is_authenticated():
-		return redirect('/login/?next=%s' % request.path)
+		context = {}
+		return render(request, 'ratings/indexNotLoggedIn.html', context)
+		# return redirect('/login/?next=%s' % request.path)
+	else:
+		artistList = Artist.objects.all().annotate(item_count=Count('item'))
+		# for artist in artistList:
+		# 	artist.item_count = Item.objects.filter(artist=artist).aggregate(Sum('item'))['item__sum']
 
-	logger.debug('test3')
-
-	artistList = Artist.objects.all().annotate(item_count=Count('item'))
-	# for artist in artistList:
-	# 	artist.item_count = Item.objects.filter(artist=artist).aggregate(Sum('item'))['item__sum']
-
-	user = request.user
-	context = {'artistList' : artistList, 'user': user}
-	return render(request, 'ratings/index.html', context)
+		user = request.user
+		context = {'artistList' : artistList, 'user': user}
+		return render(request, 'ratings/index.html', context)

@@ -8,6 +8,7 @@ from dajax.core import Dajax
 import logging
 import re
 import uuid
+from ratingsList import RatingsList
 from datetime import date, timedelta, datetime
 
 from models import Rating, Artist, Item, User
@@ -71,29 +72,22 @@ def render_rating_list(request, user_id, year_filter, viewUnrated, viewRecentlyR
 	dajax = Dajax()
 
 	userToView = get_object_or_404(User, pk=user_id)
-	ratingList = Rating.objects.select_related().filter(user=user_id)
 
-	if(viewUnrated):
-		ratingList = ratingList.filter(value=0)
+	ratingsToDisplay = RatingsList(userToView).getFullRatingList(year_filter, viewUnrated, viewRecentlyRated)
 
-	if(viewRecentlyRated):
-		today = datetime.today()
-		dateRangeStart = today - timedelta(days=14)
-		ratingList = ratingList.filter(created_datetime__gte=dateRangeStart)
-		ratingList = ratingList.order_by('created_datetime').reverse()
+	context = {'userToView': userToView, 'ratingList': ratingsToDisplay}
+	render = render_to_string('ratings/ratingList.html', context)
+	dajax.assign('#ratingList', 'innerHTML', render)
 
-	if(year_filter):
-		try:
-			year_filter = int(year_filter)
-			if(year_filter > 1000 and year_filter < 3000):
-				dateRangeStart = datetime(year_filter, 1, 1)
-				dateRangeEnd = datetime(year_filter, 12, 31)
-				ratingList = ratingList.filter(item__release_date__gte=dateRangeStart).filter(item__release_date__lte=dateRangeEnd)
-		except ValueError:
-			#invalid year input
-			year_filter = 0
+	return dajax.json()
 
-	context = {'userToView': userToView, 'ratingList': ratingList}
+@dajaxice_register
+def render_listening_queue(request, user_id):
+	dajax = Dajax()
+	userToView = get_object_or_404(User, pk=user_id)
+	ratingsToDisplay = RatingsList(userToView).getListeningQueue(10)
+
+	context = {'userToView': userToView, 'ratingList': ratingsToDisplay}
 	render = render_to_string('ratings/ratingList.html', context)
 	dajax.assign('#ratingList', 'innerHTML', render)
 
