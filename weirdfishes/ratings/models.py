@@ -28,6 +28,7 @@ class Rating(models.Model):
 	user = models.ForeignKey(User)
 	item = models.ForeignKey(Item)
 	value = models.IntegerField()
+	notes = models.TextField(null=True)
 	created_datetime = models.DateTimeField(default=datetime.datetime.now())
 
 	def __unicode__(self):
