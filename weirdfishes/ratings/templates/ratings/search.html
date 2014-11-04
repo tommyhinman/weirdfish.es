@@ -19,39 +19,48 @@
 
 {% block body %}
 
-<h3>Search Results</h3>
+<h1>Search Results</h1>
 
-<ul class="nav nav-tabs" id="search-tabs">
+<ul class="nav nav-tabs" id="search-tabs" role="tablist">
 	
-	{% if userList %}<li {% if activeTab == 'user' %}class="active"{% endif %}><a href="#users" data-toggle="tab">Users</a></li>{% endif %}
-	{% if itemList %}<li {% if activeTab == 'item' %}class="active"{% endif %}><a href="#items" data-toggle="tab">Items</a></li>{% endif %}
-	{% if artistList %}<li {% if activeTab == 'artist' %}class="active"{% endif %}><a href="#artists" data-toggle="tab">Artists</a></li>{% endif %}
+	{% if userList %}  <li role="presentation" {% if activeTab == 'user' %}class="active"{% endif %}><a href="#users" data-toggle="tab">Users</a></li>{% endif %}
+	{% if itemList %}  <li role="presentation" {% if activeTab == 'item' %}class="active"{% endif %}><a href="#items" data-toggle="tab">Items</a></li>{% endif %}
+	{% if artistList %}<li role="presentation" {% if activeTab == 'artist' %}class="active"{% endif %}><a href="#artists" data-toggle="tab">Artists</a></li>{% endif %}
 </ul>
 
 <div class="tab-content" >
-{% if userList %}
-<div class="tab-pane {% if activeTab == 'user' %}active{% endif %}" id="users">
-{% for user in userList %}
-	<p><a href="{% url 'ratings:viewUser' user.id %}"> {{user}} </a></p>
-{% endfor %}
-</div>
-{% endif %}
+	{% if userList %}
+	<div class="tab-pane {% if activeTab == 'user' %}active{% endif %}" id="users" role="tabpanel">
+		<h2>{{userList|length}} result{{userList|length|pluralize}}</h2>
+		<ul>
+			{% for user in userList %}
+			<li><a href="{% url 'ratings:viewUser' user.id %}"> {{user}} </a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
 
-{% if itemList %}
-<div class="tab-pane {% if activeTab == 'item' %}active{% endif %}" id="items">
-{% for item in itemList %}
-	<p><a href="{% url 'ratings:viewItem' item.id %}">{{item.name}} </a></p>
-{% endfor %}
-</div>
-{% endif %}
+	{% if itemList %}
+	<div class="tab-pane {% if activeTab == 'item' %}active{% endif %}" id="items" role="tabpanel">
+		<h2>{{itemList|length}} result{{itemList|length|pluralize}}</h2>
+		<ul>
+			{% for item in itemList %}
+			<li><a href="{% url 'ratings:viewItem' item.id %}">{{item.name}} </a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
 
-{% if artistList %}
-<div class="tab-pane {% if activeTab == 'artist' %}active{% endif %}" id="artists">
-{% for artist in artistList %}
-	<p><a href="{% url 'ratings:viewArtist' artist.id %}"> {{artist.name}} </a></p>
-{% endfor %}
-</div>
-{% endif %}
+	{% if artistList %}
+	<div class="tab-pane {% if activeTab == 'artist' %}active{% endif %}" id="artists" role="tabpanel">
+		<h2>{{artistList|length}} result{{artistList|length|pluralize}}</h2>
+		<ul>
+			{% for artist in artistList %}
+			<li><a href="{% url 'ratings:viewArtist' artist.id %}"> {{artist.name}} </a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
 </div>
 
 <script type="text/javascript">

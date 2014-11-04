@@ -9,7 +9,7 @@ class RatingsList:
 	def __init__(self, user):
 		self.user = user
 
-	def getFullRatingList(self, yearFilter, viewUnrated, viewRecentlyRated):
+	def getFullRatingList(self, yearFilter, viewUnrated, viewRecentlyRated, ratingLowerBound, ratingUpperBound):
 		ratingList = Rating.objects.select_related().filter(user=self.user)
 
 		if(viewUnrated):
@@ -31,6 +31,8 @@ class RatingsList:
 			except ValueError:
 				#invalid year input
 				yearFilter = 0
+
+		ratingList = ratingList.filter(value__gte=ratingLowerBound).filter(value__lte=ratingUpperBound)
 
 		return ratingList
 

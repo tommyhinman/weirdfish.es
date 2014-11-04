@@ -58,23 +58,17 @@
 {% endblock %}
 
 {% block body %}
-  <h3>Listening Queue</h3>
+  <h1>Listening Queue</h1>
   
   <div id="ratingList"> stuff </div>
 
-  <form action="{% url 'ratings:addArtist' %}" method="post" class="form-horizontal">
+  <h2>Add Artist</h2>
+  <form action="{% url 'ratings:addArtist' %}" method="post" role="form">
     {% csrf_token %}
-    <legend>Add Artist</legend>
-    <div class="control-group">
-      <label class="control-label" for="artist_name">Name</label>
-      <div class="controls">
-        <input type="text" name="artist_name" id="artist_name" placeholder="Radiohead">
-      </div>
+    <div class="form-group">
+      <label for="artist_name">Name</label>
+      <input type="text" class="form-control" name="artist_name" id="artist_name" placeholder="Radiohead">
     </div>
-    <div class="control-group">
-      <div class="controls">
-        <button type="submit" class="btn">Submit</button>
-      </div>
-    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
   </form>
 {% endblock %}

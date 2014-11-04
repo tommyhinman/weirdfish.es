@@ -44,7 +44,7 @@
 <h3>{{ artist.name }}</h3>
 
 {% if itemList %}
-  <table id="items-table" class="table table-bordered table-hover">
+  <table id="items-table" class="table table-hover">
     <thead>
       <tr>
         <th scope="col">Album</th>
@@ -62,6 +62,7 @@
           <td>{{ item.average_rating}}</td>
           <td id="rating-cell">
             <div class="input-append control-group" id="rating-control-group-{{item.id}}">
+              <!--TODO: This needs to be replaced by the raty widget. Alternatively it should just use the standard ratingsList table or something -->
               <input class="input-mini" id="rating-{{item.id}}" type="text" value="{{item.userRating}}" style="text-align:center;">
               <button type="button" class="btn" onclick="rate_button_clicked({{item.id}});">Rate</button>
             </div>
@@ -77,45 +78,35 @@
   </table>
 {% endif %}
 
-
-<form class="form-horizontal" action="{% url 'ratings:addItem' %}" method="post">
-  <legend>Add Item</legend>
+<h2>Add Item</h2>
+<form role="form" class="form-horizontal" action="{% url 'ratings:addItem' %}" method="post">
   {% csrf_token %}
-  <div class="control-group">
-    <input id="artist_id" name="artist_id" value="{{ artist.id }}" type="hidden" >
-
-    <label class="control-label" for="artist_id">Artist: </label>
-    <div class="controls">
-      <input type="text" name="artist_name" id="artist_name" value="{{ artist.name }}" readonly />
-    </div>
-
-    <label class="control-label" for="item_name">Name: </label>
-    <div class="controls">
-      <input type="text" name="item_name" id="item_name" />
-    </div>
-
-    <label class="control-label" for="item_type">Item Type: </label>
-    <div class="controls">
-      <select name="item_type" id="item_type">
-      {% for itemTypeKey, itemTypeVal in itemTypeList %}
-        <option value="{{ itemTypeKey }}">{{ itemTypeVal }}</option>
-      {% endfor %}
-      </select>
-    </div>
-    
-    <label class="control-label" for="release_date">Release Date: </label>
-    <div class="controls">
-      <input id="release_date" name="release_date" type="text"></input>
-    </div>
+  <input id="artist_id" name="artist_id" value="{{ artist.id }}" type="hidden" >
+  <div class="form-group">
+    <label for="artist_name" class="control-label">Artist: </label>
+    <input type="text" class="form-control" name="artist_name" id="artist_name" value="{{ artist.name }}" readonly />
   </div>
 
-  <div class="control-group">
-    <div class="controls">
-      <input type="submit" value="Submit" class="btn btn-primary"/>
-    </div>
-  </div>  
+  <div class="form-group">
+    <label for="item_name" class="control-label">Name: </label>
+    <input type="text" class="form-control" name="item_name" id="item_name" />
+  </div>
 
+  <div class="form-group">
+    <label class="control-label" for="item_type">Item Type: </label>
+    <select class="form-control" name="item_type" id="item_type">
+      {% for itemTypeKey, itemTypeVal in itemTypeList %}
+      <option value="{{ itemTypeKey }}">{{ itemTypeVal }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    
+  <div class="form-group">
+    <label for="release_date" class="control-label">Release Date: </label>
+    <input class="form-control" type="text" id="release_date" name="release_date" />
+  </div>
 
+  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 <script>

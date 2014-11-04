@@ -17,8 +17,15 @@
                     }
                 }
 
-                renderRatingList();
+                // Initialize Rating Slider
+                $('#ratingSlider').slider({
+                    min: 0,
+                    max: 10,
+                    step: 1,
+                    value: [0,10],
+                }).on('slideStop', renderRatingList);
 
+                renderRatingList();
             } 
         );
 
@@ -43,12 +50,16 @@
             var yearFilter = $('#yearFilterPicker option:selected').val();
             var viewUnrated = $('#viewUnrated').is(':checked');
             var viewRecentlyRated = $('#viewRecentlyRated').is(':checked');
+            var ratingSliderLower = $('#ratingSlider').data('slider').getValue()[0];
+            var ratingSliderUpper = $('#ratingSlider').data('slider').getValue()[1];
 
             var data = {
                 'user_id': {{userToView.id}},
                 'year_filter': yearFilter,
                 'viewUnrated': viewUnrated,
                 'viewRecentlyRated': viewRecentlyRated,
+                'ratingLowerBound': ratingSliderLower,
+                'ratingUpperBound': ratingSliderUpper,
             };
             
             $('#ratingList').html('');
@@ -89,17 +100,24 @@
 
 {% block body %}
     <h3>Ratings for {{userToView.username}}</h3>
-    <form class="form-inline">
-        <div class="form-actions">
-        <label for="yearFilterPicker">Filter by Year: </label>
-        <select name="yearFilterPicker" id="yearFilterPicker" onchange="renderRatingList();"></select>
-        <label class="checkbox inline" id="rating-filter" >
-            <input type="checkbox" id="viewUnrated" onchange="renderRatingList();"> View Unrated
-        </label>
-        <label class="checkbox inline" id="rating-filter">
-            <input type="checkbox" id="viewRecentlyRated" onchange="renderRatingList();">View Recently Rated
-        </label>
-        <!-- <div><label for="enterArtist">Artist: </label><input id="enterArtist" /></div> -->
+    <form class="form-inline" role="form">
+        <div class="form-group">
+            <label for="yearFilterPicker">Filter by Year: </label>
+            <select name="yearFilterPicker" id="yearFilterPicker" class="form-control" onchange="renderRatingList();"></select>
+        </div>
+        <div class="form-group">
+            <label class="checkbox inline" id="rating-filter" >
+                <input type="checkbox" id="viewUnrated" class="form-control" onchange="renderRatingList();"> View Unrated
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="checkbox inline" id="rating-filter">
+                <input type="checkbox" id="viewRecentlyRated" class="form-control" onchange="renderRatingList();">View Recently Rated
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="ratingSlider">Filter by Rating: </label>
+            <input type="text" class="span2" name="ratingSlider" class="form-control" id="ratingSlider" value=""/>
         </div>
     </form>
 

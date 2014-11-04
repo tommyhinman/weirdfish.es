@@ -68,12 +68,12 @@ def get_artist_list(request, data):
 	return serializedArtistList
 
 @dajaxice_register
-def render_rating_list(request, user_id, year_filter, viewUnrated, viewRecentlyRated):
+def render_rating_list(request, user_id, year_filter, viewUnrated, viewRecentlyRated, ratingLowerBound, ratingUpperBound):
 	dajax = Dajax()
 
 	userToView = get_object_or_404(User, pk=user_id)
 
-	ratingsToDisplay = RatingsList(userToView).getFullRatingList(year_filter, viewUnrated, viewRecentlyRated)
+	ratingsToDisplay = RatingsList(userToView).getFullRatingList(year_filter, viewUnrated, viewRecentlyRated, ratingLowerBound, ratingUpperBound)
 
 	context = {'userToView': userToView, 'ratingList': ratingsToDisplay}
 	render = render_to_string('ratings/ratingList.html', context)
